@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="采购智能中台统一模型与厂商凭据管理" />
+    <title>模型中心 · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/models.css" />
+  </head>
+  <body class="auth-pending">
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="后台主导航">
+        <a class="brand" href="/" aria-label="采购执行舱首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span></a>
+        <nav class="sidebar-nav">
+          <p class="sidebar-label">采购工作台</p>
+          <a class="sidebar-item" href="/"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg><span>工作概览</span></a>
+          <a class="sidebar-item" href="/chat"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg><span>采购对话</span><i class="nav-live"></i></a>
+          <a class="sidebar-item" href="/applications"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3"/></svg><span>申请记录</span></a>
+          <p class="sidebar-label system-label">系统能力</p>
+          <a class="sidebar-item active" href="/models" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10 4v6m-3-3h6M4 17h7"/></svg><span>模型中心</span></a>
+          <a class="sidebar-item" href="/skills"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2 4 4 .5-3 3 .8 4.5L12 13l-3.8 2 .8-4.5-3-3L10 7l2-4Z"/></svg><span>Skills 技能</span></a>
+          <a class="sidebar-item" href="/sandboxes"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/></svg><span>沙箱实例</span></a>
+          <a class="sidebar-item" href="/runs"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m8 7 3 8m5-8-3 8M8 6h8"/></svg><span>Agent 运行</span></a>
+          <a class="sidebar-item" href="/langfuse"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19V9m7 10V5m7 14v-7M3 19h18"/></svg><span>LangFuse 链路</span></a>
+        </nav>
+        <a class="sidebar-footer user-switch" href="/login?switch=1" title="切换用户"><div class="user-avatar" id="sidebarAvatar">—</div><div class="user-copy"><strong id="sidebarUserName">载入中</strong><span id="sidebarUserRole">—</span></div><span class="user-more">切换</span></a>
+      </aside>
+
+      <div class="admin-content">
+        <header class="topbar">
+          <div class="topbar-title"><span>系统设置</span><i>/</i><strong>模型中心</strong></div>
+          <div class="topbar-center"><span>厂商级凭据复用</span><i></i><span>服务端加密保存</span></div>
+          <div class="topbar-actions"><span class="role-pill admin" id="rolePill">管理员</span><a class="ghost-button" href="/chat">进入采购对话</a></div>
+        </header>
+
+        <main class="models-shell">
+          <section class="models-heading">
+            <div><p class="section-kicker">MODEL CONTROL CENTER</p><h1>统一模型管理</h1><p>每个厂商只需配置一次 API Key，厂商内的模型可直接切换。</p></div>
+            <div class="security-note"><i>✓</i><span><strong>密钥不会返回浏览器</strong><small>数据库仅保存加密密文，页面只显示掩码。</small></span></div>
+          </section>
+
+          <section class="model-summary" aria-label="模型配置统计">
+            <article><span>支持厂商</span><strong id="providerCount">4</strong><small>含本地兜底引擎</small></article>
+            <article><span>已配置厂商</span><strong id="configuredCount">0</strong><small>可用于采购对话</small></article>
+            <article><span>可选模型</span><strong id="modelCount">1</strong><small>按厂商共享凭据</small></article>
+          </section>
+
+          <section class="provider-grid" id="providerGrid" aria-live="polite"><div class="providers-loading">正在读取模型配置…</div></section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/models.js" defer></script>
+  </body>
+</html>

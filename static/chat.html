@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Harness 智能采购助手对话工作区" />
+    <title>采购对话 · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/chat.css" />
+  </head>
+  <body class="auth-pending">
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="后台主导航">
+        <a class="brand" href="/" aria-label="采购执行舱首页">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span>
+        </a>
+        <nav class="sidebar-nav">
+          <p class="sidebar-label">采购工作台</p>
+          <a class="sidebar-item" href="/"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg><span>工作概览</span></a>
+          <a class="sidebar-item active" href="/chat" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg><span>采购对话</span><i class="nav-live"></i></a>
+          <a class="sidebar-item" href="/applications"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3"/></svg><span>申请记录</span></a>
+          <a class="sidebar-item" href="/runs"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m8 7 3 8m5-8-3 8M8 6h8"/></svg><span>Agent 运行</span></a>
+          <div class="admin-only">
+            <p class="sidebar-label system-label">系统能力</p>
+            <a class="sidebar-item" href="/models"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10 4v6m-3-3h6M4 17h7"/></svg><span>模型中心</span></a>
+            <a class="sidebar-item" href="/skills"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2 4 4 .5-3 3 .8 4.5L12 13l-3.8 2 .8-4.5-3-3L10 7l2-4Z"/></svg><span>Skills 技能</span></a>
+            <a class="sidebar-item" href="/sandboxes"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/></svg><span>沙箱实例</span></a>
+            <a class="sidebar-item" href="/langfuse/open" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19V9m7 10V5m7 14v-7M3 19h18"/></svg><span>LangFuse 链路</span></a>
+          </div>
+        </nav>
+        <a class="sidebar-footer user-switch" href="/login?switch=1" title="切换用户">
+          <div class="user-avatar" id="sidebarAvatar">—</div>
+          <div class="user-copy"><strong id="sidebarUserName">载入中</strong><span id="sidebarUserRole">—</span></div>
+          <span class="user-more">切换</span>
+        </a>
+      </aside>
+
+      <div class="admin-content chat-admin-content">
+        <header class="topbar">
+          <div class="topbar-title"><span>采购中心</span><i>/</i><strong>采购对话</strong></div>
+          <div class="model-switcher" aria-label="对话模型选择">
+            <label><span>厂商</span><select id="providerSelect" aria-label="选择模型厂商"></select></label>
+            <label><span>模型</span><select id="modelSelect" aria-label="选择模型"></select></label>
+            <a class="model-manage-link admin-only" href="/models">统一管理</a>
+          </div>
+          <div class="topbar-actions">
+            <span class="role-pill" id="rolePill">—</span>
+            <a class="ghost-button mode-link" href="/runs">Agent 运行</a>
+          </div>
+        </header>
+
+        <main class="chat-shell">
+          <section class="chat-layout panel">
+            <aside class="conversation-panel">
+              <div class="conversation-panel-actions"><button class="new-chat-button" id="newChatButton" type="button"><span>＋</span> 新建对话</button><button class="close-history-button" id="closeHistoryButton" type="button" aria-label="关闭历史对话">×</button></div>
+              <p class="conversation-label">最近对话</p>
+              <div class="conversation-list" id="conversationList"><div class="conversation-loading">正在读取历史对话…</div></div>
+              <div class="conversation-tip"><strong>历史对话已持久化</strong><span>按当前登录用户隔离保存，可随时打开并继续发送消息。</span></div>
+            </aside>
+
+            <section class="chat-room" aria-labelledby="chatTitle">
+              <header class="chat-room-header">
+                <button class="mobile-history-button" id="mobileHistoryButton" type="button" aria-label="打开历史对话" aria-expanded="false"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+                <div class="assistant-identity">
+                  <span class="assistant-avatar"><i></i><i></i><i></i></span>
+                  <div><h1 id="chatTitle">采购分析助手</h1><p><i></i><span id="modelStatus">正在检查模型</span></p></div>
+                </div>
+                <button class="apply-order-button" id="openApplicationButton" type="button">发起采购申请</button>
+              </header>
+
+              <div class="message-stream" id="messageStream" aria-live="polite"></div>
+
+              <div class="suggestion-row" id="suggestionRow">
+                <button type="button">帮我整理一条采购需求</button>
+                <button type="button">如何比较三家供应商？</button>
+                <button type="button">创建订单需要哪些信息？</button>
+              </div>
+
+              <form class="chat-composer" id="chatForm">
+                <textarea id="messageInput" rows="1" maxlength="4000" placeholder="描述采购需求，或询问供应商、报价、订单状态…" aria-label="输入采购问题"></textarea>
+                <div class="composer-footer">
+                  <div><span class="composer-chip">Skills 自动加载</span><span class="composer-chip" id="traceChip">LangFuse 未接入</span></div>
+                  <span class="composer-hint">Shift + Enter 换行</span>
+                  <button class="send-button" id="sendButton" type="submit" aria-label="发送消息"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 4 17 8-17 8 3-8-3-8Zm3 8h14"/></svg></button>
+                </div>
+              </form>
+            </section>
+
+            <aside class="context-panel">
+              <div class="context-heading"><span>当前上下文</span><b id="contextCount">0 / 20</b></div>
+              <div class="context-group"><p>已加载能力</p><span><i class="green"></i>采购分析 SOP</span><span><i class="green"></i>供应商报价映射</span><span><i></i>网页内容获取</span></div>
+              <div class="context-group"><p>执行环境</p><span><i class="green"></i>Sandbox Proxy</span><span><i class="green"></i>Memory Store</span><span id="langfuseContext"><i></i>LangFuse 未接入</span></div>
+              <div class="context-group"><p>当前权限</p><div class="permission-box" id="permissionBox">正在载入用户权限…</div></div>
+            </aside>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <dialog class="application-dialog" id="applicationDialog">
+      <form method="dialog" class="dialog-card" id="applicationForm">
+        <div class="dialog-heading"><div><p class="section-kicker">ORDER APPLICATION</p><h2>发起采购申请</h2></div><button class="dialog-close" value="cancel" type="button" aria-label="关闭">×</button></div>
+        <label><span>采购物料</span><input id="applicationItem" required placeholder="例如：M8×30 A2-70 内六角螺栓" /></label>
+        <div class="dialog-grid"><label><span>数量</span><input id="applicationQuantity" required type="number" min="1" value="12000" /></label><label><span>要求到货日期</span><input id="applicationDate" required type="date" value="2026-09-12" /></label></div>
+        <label><span>申请原因</span><textarea id="applicationReason" required rows="3" placeholder="说明业务用途和紧急程度"></textarea></label>
+        <div class="dialog-error" id="applicationError"></div>
+        <div class="dialog-actions"><button type="button" class="dialog-cancel">取消</button><button type="submit" class="dialog-submit">提交订单申请</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/chat.js" defer></script>
+  </body>
+</html>

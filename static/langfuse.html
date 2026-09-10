@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="连接 Harness 采购助手与 LangFuse 项目" />
+    <title>接入 LangFuse · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/langfuse.css" />
+  </head>
+  <body class="lf-body">
+    <header class="lf-topbar">
+      <a class="brand" href="/" aria-label="返回采购执行舱">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span>
+      </a>
+      <div class="lf-header-actions">
+        <a class="lf-switch-user" href="/models">模型中心</a>
+        <a class="lf-switch-user" href="/login?switch=1">切换用户</a>
+        <a class="lf-back" href="/">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+          返回任务执行舱
+        </a>
+      </div>
+    </header>
+
+    <main class="lf-shell">
+      <section class="lf-intro" aria-labelledby="lfPageTitle">
+        <div>
+          <p class="section-kicker">OBSERVABILITY CONNECTION</p>
+          <h1 id="lfPageTitle">接入 LangFuse</h1>
+          <p class="lf-lead">把采购任务、SubAgent 委派、工具调用、LLM 生成和订单审批写入同一条可追溯链路。</p>
+        </div>
+
+        <div class="lf-feature-list">
+          <article>
+            <span>01</span>
+            <div><strong>服务端验证</strong><p>通过 LangFuse Public API 验证项目 Key，不在浏览器中保存 Secret Key。</p></div>
+          </article>
+          <article>
+            <span>02</span>
+            <div><strong>真实 Trace 写入</strong><p>使用 Python SDK v4 与 OpenTelemetry，将任务和工具 Span 写入目标项目。</p></div>
+          </article>
+          <article>
+            <span>03</span>
+            <div><strong>一键定位链路</strong><p>采购页面自动关联最新 Trace URL，可直接打开 LangFuse 详情。</p></div>
+          </article>
+        </div>
+
+        <div class="lf-route-diagram" aria-label="链路数据流">
+          <span>采购 Agent</span><i>→</i><span>FastAPI</span><i>→</i><span>OTel SDK</span><i>→</i><span class="accent">LangFuse</span>
+        </div>
+      </section>
+
+      <section class="lf-card" aria-labelledby="connectionTitle">
+        <div class="lf-card-heading">
+          <div>
+            <span class="lf-state-dot" id="connectionDot"></span>
+            <span id="connectionLabel">等待配置</span>
+          </div>
+          <small>API 凭据接入</small>
+        </div>
+
+        <div id="connectView">
+          <h2 id="connectionTitle">连接项目</h2>
+          <p class="lf-card-copy">API Key 位于 LangFuse 项目的 Settings → API Keys。</p>
+
+          <form id="connectForm" novalidate>
+            <label class="lf-field">
+              <span>部署区域</span>
+              <select id="regionSelect">
+                <option value="https://cloud.langfuse.com">Cloud EU · cloud.langfuse.com</option>
+                <option value="https://us.cloud.langfuse.com">Cloud US · us.cloud.langfuse.com</option>
+                <option value="https://jp.cloud.langfuse.com">Cloud Japan · jp.cloud.langfuse.com</option>
+                <option value="custom">自托管 / 自定义地址</option>
+              </select>
+            </label>
+
+            <label class="lf-field">
+              <span>LangFuse Host</span>
+              <input id="baseUrl" name="base_url" type="url" value="https://cloud.langfuse.com" required spellcheck="false" />
+            </label>
+
+            <label class="lf-field">
+              <span>Public Key</span>
+              <input id="publicKey" name="public_key" type="text" placeholder="pk-lf-..." required autocomplete="off" spellcheck="false" />
+            </label>
+
+            <label class="lf-field">
+              <span>Secret Key</span>
+              <span class="lf-password-wrap">
+                <input id="secretKey" name="secret_key" type="password" placeholder="sk-lf-..." required autocomplete="off" spellcheck="false" />
+                <button type="button" id="toggleSecret" aria-label="显示 Secret Key">显示</button>
+              </span>
+            </label>
+
+            <div class="lf-error" id="connectError" role="alert"></div>
+            <button class="lf-primary-button" id="connectButton" type="submit">
+              <span>验证并接入 LangFuse</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </form>
+
+          <div class="lf-divider"><span>或</span></div>
+          <a class="lf-secondary-button" id="directConsole" href="https://cloud.langfuse.com" target="_blank" rel="noopener">无需 API 接入，直接打开 LangFuse 登录页 ↗</a>
+
+          <p class="lf-security-note">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3m-12 0h14v11H5V10Z"/></svg>
+            Secret Key 仅保存在当前 FastAPI 进程的服务端内存中；API Key 用于数据接入，LangFuse 控制台仍可能要求账号登录或 SSO。
+          </p>
+        </div>
+
+        <div class="lf-connected-view" id="connectedView" hidden>
+          <div class="lf-success-icon">✓</div>
+          <h2>项目已接入</h2>
+          <p>验证 Trace 已成功提交。后续采购执行和订单审批会自动写入这个项目。</p>
+
+          <dl class="lf-project-details">
+            <div><dt>项目</dt><dd id="projectName">—</dd></div>
+            <div><dt>组织</dt><dd id="organizationName">—</dd></div>
+            <div><dt>Host</dt><dd id="connectedHost">—</dd></div>
+            <div><dt>Public Key</dt><dd id="maskedKey">—</dd></div>
+            <div><dt>最新 Trace</dt><dd id="latestTraceId">—</dd></div>
+          </dl>
+
+          <a class="lf-primary-button link-button" id="openTraceButton" href="/langfuse/open" target="_blank" rel="noopener">
+            <span>进入 LangFuse Trace</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <button class="lf-secondary-button full-button" id="testTraceButton" type="button">发送一条测试 Trace</button>
+          <button class="lf-danger-button" id="disconnectButton" type="button">断开当前项目</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/langfuse.js" defer></script>
+  </body>
+</html>

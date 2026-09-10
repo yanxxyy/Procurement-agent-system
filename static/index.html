@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="基于 Harness Engineering 与 LangFuse 的智能采购任务执行可视化" />
+    <title>采购执行舱 · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="auth-pending">
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="后台主导航">
+      <a class="brand" href="/" aria-label="采购工作概览">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span>
+      </a>
+
+        <nav class="sidebar-nav">
+          <p class="sidebar-label">采购工作台</p>
+          <a class="sidebar-item" href="/">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg>
+            <span>工作概览</span>
+          </a>
+          <a class="sidebar-item" href="/chat">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg>
+            <span>采购对话</span><i class="nav-live"></i>
+          </a>
+          <a class="sidebar-item" href="/applications">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3"/></svg>
+            <span>申请记录</span>
+          </a>
+          <a class="sidebar-item active" href="/runs" aria-current="page">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m8 7 3 8m5-8-3 8M8 6h8"/></svg>
+            <span>Agent 运行</span><i class="nav-live"></i>
+          </a>
+          <div class="admin-only">
+          <p class="sidebar-label system-label">系统能力</p>
+          <a class="sidebar-item" href="/models">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10 4v6m-3-3h6M4 17h7"/></svg>
+            <span>模型中心</span>
+          </a>
+          <a class="sidebar-item" href="/skills">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2 4 4 .5-3 3 .8 4.5L12 13l-3.8 2 .8-4.5-3-3L10 7l2-4Z"/></svg>
+            <span>Skills 技能</span>
+          </a>
+          <a class="sidebar-item" href="/sandboxes">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/></svg>
+            <span>沙箱实例</span>
+          </a>
+          <a class="sidebar-item" href="/langfuse/open" target="_blank" rel="noopener">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19V9m7 10V5m7 14v-7M3 19h18"/></svg>
+            <span>LangFuse 链路</span>
+          </a>
+          </div>
+        </nav>
+
+        <a class="sidebar-footer user-switch" href="/login?switch=1" title="切换用户">
+          <div class="user-avatar" id="sidebarAvatar">—</div>
+          <div class="user-copy"><strong id="sidebarUserName">载入中</strong><span id="sidebarUserRole">—</span></div>
+          <span class="user-more">切换</span>
+        </a>
+      </aside>
+
+      <div class="admin-content">
+        <header class="topbar">
+          <div class="topbar-title"><span>采购中心</span><i>/</i><strong>任务详情</strong></div>
+          <div class="topbar-center" aria-label="运行环境">
+            <span>prod-cn-01</span><i></i><span>DeepSeek-V4</span><i class="admin-only"></i><span class="admin-only" id="langfuseHeaderStatus">LangFuse 未接入</span>
+          </div>
+          <div class="topbar-actions">
+            <span class="role-pill" id="rolePill">—</span>
+            <span class="live-pill"><i></i><span id="streamStatus">SSE LIVE</span></span>
+            <a class="ghost-button mode-link" href="/chat">进入采购对话</a>
+            <button class="ghost-button" id="replayButton" type="button" title="从头播放任务执行过程">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4v6h6M5.1 15A8 8 0 1 0 6 7.5L4 10"/></svg>
+              重放执行
+            </button>
+          </div>
+        </header>
+
+        <main class="shell">
+      <section class="run-heading" aria-labelledby="runTitle">
+        <div>
+          <div class="eyebrow"><span id="runId">RUN-20260906-0472</span><span class="slash">/</span><span>智能采购任务</span></div>
+          <h1 id="runTitle">M8 不锈钢紧固件采购</h1>
+          <p id="runRequest">采购 12,000 件 M8×30 A2-70 内六角螺栓，9 月 12 日前到仓</p>
+        </div>
+        <div class="run-score" aria-label="任务总体进度">
+          <div class="score-ring" id="scoreRing"><span id="overallProgress">78</span><small>%</small></div>
+          <div><span>总体进度</span><strong id="completionText">4 / 6 已完成</strong></div>
+        </div>
+      </section>
+
+      <section class="metrics" aria-label="运行指标">
+        <article class="metric-card primary-metric">
+          <div class="metric-icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 17l5-5 4 4 7-8M15 8h5v5"/></svg></div>
+          <div><span>预计节省</span><strong>¥26,800</strong></div>
+          <small>较历史采购价 ↓ 8.6%</small>
+        </article>
+        <article class="metric-card">
+          <div><span>候选供应商</span><strong>07</strong></div>
+          <small>3 家进入最终比选</small>
+        </article>
+        <article class="metric-card admin-only">
+          <div><span>工具调用</span><strong id="toolCallCount">11</strong></div>
+          <small>成功率 100%</small>
+        </article>
+        <article class="metric-card admin-only">
+          <div><span>Token 用量</span><strong>28.4k</strong></div>
+          <small>上下文压缩 2 次</small>
+        </article>
+        <article class="metric-card">
+          <div><span>当前耗时</span><strong id="elapsedTime">12.8s</strong></div>
+          <small>P95 工具延迟 1.24s</small>
+        </article>
+      </section>
+
+      <section class="workflow-card panel" aria-labelledby="workflowTitle">
+        <div class="panel-header compact">
+          <div>
+            <p class="section-kicker">EXECUTION GRAPH</p>
+            <h2 id="workflowTitle">任务编排</h2>
+          </div>
+          <div class="legend" aria-label="状态图例"><span><i class="dot done"></i>已完成</span><span><i class="dot active"></i>执行中</span><span><i class="dot queued"></i>待处理</span></div>
+        </div>
+        <div class="workflow" id="workflow" aria-label="采购任务执行流程"></div>
+      </section>
+
+      <section class="applications-panel panel" aria-labelledby="applicationsTitle">
+        <div class="panel-header compact">
+          <div><p class="section-kicker">ORDER REQUESTS</p><h2 id="applicationsTitle">订单申请</h2></div>
+          <div class="application-header-actions"><a class="text-button application-create-link" href="/applications">查看全部记录</a><a class="text-button application-create-link" href="/chat">发起新申请</a></div>
+        </div>
+        <div class="application-list" id="applicationList"><div class="application-empty">正在读取申请记录…</div></div>
+      </section>
+
+      <div class="content-grid">
+        <section class="panel task-panel" aria-labelledby="tasksTitle">
+          <div class="panel-header">
+            <div>
+              <p class="section-kicker">TASK ORCHESTRATION</p>
+              <h2 id="tasksTitle">子任务执行明细</h2>
+            </div>
+            <button class="text-button" type="button" id="toggleAllButton">全部展开</button>
+          </div>
+          <div class="task-list" id="taskList" aria-live="polite"></div>
+        </section>
+
+        <aside class="side-column">
+          <section class="panel trace-panel admin-only" aria-labelledby="traceTitle">
+            <div class="panel-header compact">
+              <div>
+                <p class="section-kicker">LANGFUSE TRACE</p>
+                <h2 id="traceTitle">链路追踪</h2>
+              </div>
+              <a class="trace-link" id="traceLink" href="/langfuse" title="接入或打开 LangFuse">去接入 LangFuse ↗</a>
+            </div>
+            <a class="langfuse-inline-status" id="langfuseInlineStatus" href="/langfuse">
+              <i></i><span><strong>尚未接入真实 LangFuse</strong><small>点击配置 Host 与项目 API Key</small></span><b>配置</b>
+            </a>
+            <div class="trace-stats">
+              <div><span>总耗时</span><strong>12.8s</strong></div>
+              <div><span>LLM 调用</span><strong>06</strong></div>
+              <div><span>成本估算</span><strong>¥0.84</strong></div>
+            </div>
+            <div class="trace-bars" aria-label="各阶段链路耗时">
+              <div><span>需求解析</span><i><b style="--width:22%"></b></i><em>0.84s</em></div>
+              <div><span>供应商检索</span><i><b style="--width:62%"></b></i><em>2.42s</em></div>
+              <div><span>市场调研</span><i><b style="--width:94%"></b></i><em>3.68s</em></div>
+              <div><span>对比分析</span><i><b style="--width:50%"></b></i><em>1.94s</em></div>
+              <div><span>报告生成</span><i><b class="running-bar" style="--width:71%"></b></i><em>2.76s</em></div>
+            </div>
+          </section>
+
+          <section class="panel sandbox-panel admin-only" aria-labelledby="sandboxTitle">
+            <div class="panel-header compact">
+              <div>
+                <p class="section-kicker">SANDBOX CONTROL PLANE</p>
+                <h2 id="sandboxTitle">透明代理 · Hot-Swap</h2>
+              </div>
+              <span class="healthy"><i></i>HEALTHY</span>
+            </div>
+            <div class="sandbox-flow" aria-label="沙箱透明代理拓扑">
+              <div class="node agent-node"><span>Agent</span><small>stable client</small></div>
+              <div class="flow-line"><i></i><span>stable handle</span></div>
+              <div class="node proxy-node"><span>Proxy</span><small>sbx-proxy-07</small></div>
+              <div class="flow-line hot"><i></i><span>route</span></div>
+              <div class="node sandbox-node"><span>Sandbox</span><small id="sandboxInstance">b7c1 · active</small></div>
+            </div>
+            <div class="recovery-strip" id="recoveryStrip">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
+              <div><strong>已自动恢复 1 次</strong><span>实例热替换 1.2s · 14 个文件已还原</span></div>
+            </div>
+          </section>
+
+          <section class="panel event-panel" aria-labelledby="eventTitle">
+            <div class="panel-header compact">
+              <div>
+                <p class="section-kicker">LIVE ACTIVITY</p>
+                <h2 id="eventTitle">实时执行流</h2>
+              </div>
+              <span class="event-count" id="eventCount">03</span>
+            </div>
+            <ol class="event-list" id="eventList"></ol>
+          </section>
+        </aside>
+      </div>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

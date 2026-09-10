@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Harness 智能采购中台权限登录" />
+    <title>登录 · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/login.css" />
+  </head>
+  <body class="login-body">
+    <main class="login-shell">
+      <section class="login-intro">
+        <a class="brand login-brand" href="/login" aria-label="Harness 采购智能中台">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span>
+        </a>
+        <div class="login-intro-copy">
+          <p class="section-kicker">ROLE-BASED PROCUREMENT</p>
+          <h1>让每一步采购<br />都在权限内发生</h1>
+          <p>员工提交需求，管理员查看完整执行链并审批订单。所有敏感写操作都在服务端执行权限校验。</p>
+        </div>
+        <div class="permission-preview">
+          <div><span>普通员工</span><strong>发起申请 · 跟踪进度 · 对话咨询</strong></div>
+          <i></i>
+          <div><span>管理员</span><strong>完整链路 · 系统配置 · 流程审批</strong></div>
+        </div>
+      </section>
+
+      <section class="login-card" aria-labelledby="loginTitle">
+        <div class="login-current" id="currentUserBanner" hidden>
+          当前已登录 <strong id="currentUserName"></strong>，登录其他账号将自动切换用户。
+        </div>
+        <p class="section-kicker">ACCOUNT ACCESS</p>
+        <h2 id="loginTitle">登录采购工作台</h2>
+        <p class="login-copy">选择演示账号，或手动输入用户名和密码。</p>
+
+        <div class="account-grid" id="accountGrid" aria-label="演示用户">
+          <button class="account-option selected" type="button" data-user="admin" data-password="Admin@2026">
+            <span class="account-avatar admin">管</span>
+            <span><strong>系统管理员</strong><small>admin · 管理员</small></span>
+            <i>✓</i>
+          </button>
+          <button class="account-option" type="button" data-user="employee" data-password="Employee@2026">
+            <span class="account-avatar">员</span>
+            <span><strong>普通员工</strong><small>employee · 产品研发部</small></span>
+            <i>✓</i>
+          </button>
+          <button class="account-option" type="button" data-user="li.ming" data-password="User@2026">
+            <span class="account-avatar">李</span>
+            <span><strong>李明</strong><small>li.ming · 智能制造部</small></span>
+            <i>✓</i>
+          </button>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <label class="login-field"><span>用户名</span><input id="username" name="username" value="admin" required autocomplete="username" /></label>
+          <label class="login-field">
+            <span>密码</span>
+            <span class="login-password-wrap">
+              <input id="password" name="password" type="password" value="Admin@2026" required autocomplete="current-password" />
+              <button id="togglePassword" type="button">显示</button>
+            </span>
+          </label>
+          <div class="login-error" id="loginError" role="alert"></div>
+          <button class="login-button" id="loginButton" type="submit">登录工作台 <span>→</span></button>
+        </form>
+
+        <div class="demo-credentials">
+          <strong>演示账号</strong>
+          <span>管理员：Admin@2026</span>
+          <span>普通员工：Employee@2026 / User@2026</span>
+        </div>
+      </section>
+    </main>
+    <script src="/static/login.js" defer></script>
+  </body>
+</html>

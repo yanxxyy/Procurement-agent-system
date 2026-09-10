@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工作概览 · Harness Procurement</title><link rel="stylesheet" href="/static/styles.css"><link rel="stylesheet" href="/static/control.css"><link rel="stylesheet" href="/static/overview.css"></head>
+<body class="auth-pending"><div class="admin-layout">
+  <aside class="admin-sidebar" aria-label="后台主导航">
+    <a class="brand" href="/"><span class="brand-mark"><i></i><i></i><i></i><i></i></span><span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span></a>
+    <nav class="sidebar-nav">
+      <p class="sidebar-label">采购工作台</p>
+      <a class="sidebar-item active" href="/" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg><span>工作概览</span></a>
+      <a class="sidebar-item" href="/chat"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg><span>采购对话</span><i class="nav-live"></i></a>
+      <a class="sidebar-item" href="/applications"><svg viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3"/></svg><span>申请记录</span></a>
+      <a class="sidebar-item" href="/runs"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m8 7 3 8m5-8-3 8M8 6h8"/></svg><span>Agent 运行</span></a>
+      <div class="admin-only"><p class="sidebar-label system-label">系统能力</p>
+        <a class="sidebar-item" href="/models"><svg viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10 4v6m-3-3h6M4 17h7"/></svg><span>模型中心</span></a>
+        <a class="sidebar-item" href="/skills"><svg viewBox="0 0 24 24"><path d="m12 3 2 4 4 .5-3 3 .8 4.5L12 13l-3.8 2 .8-4.5-3-3L10 7l2-4Z"/></svg><span>Skills 技能</span></a>
+        <a class="sidebar-item" href="/sandboxes"><svg viewBox="0 0 24 24"><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/></svg><span>沙箱实例</span></a>
+        <a class="sidebar-item" href="/langfuse"><svg viewBox="0 0 24 24"><path d="M5 19V9m7 10V5m7 14v-7M3 19h18"/></svg><span>LangFuse 链路</span></a>
+      </div>
+    </nav>
+    <a class="sidebar-footer user-switch" href="/login?switch=1"><div class="user-avatar" id="sidebarAvatar">—</div><div class="user-copy"><strong id="sidebarUserName">载入中</strong><span id="sidebarUserRole">—</span></div><span class="user-more">切换</span></a>
+  </aside>
+  <div class="admin-content"><header class="topbar"><div class="topbar-title"><span>采购中心</span><i>/</i><strong>工作概览</strong></div><div class="topbar-center"><span>业务与运行状态解耦</span><i></i><span id="refreshTime">正在更新</span></div><div class="topbar-actions"><span class="role-pill" id="rolePill">—</span><a class="ghost-button" href="/chat">发起对话</a></div></header>
+    <main class="control-shell">
+      <section class="control-heading"><div><p class="section-kicker">WORKSPACE OVERVIEW</p><h1 id="welcomeTitle">采购工作概览</h1><p>在这里掌握业务摘要；Agent 的执行细节、Skills 与沙箱已进入各自控制面。</p></div></section>
+      <section class="summary-grid"><article><span>我的历史对话</span><strong id="conversationCount">—</strong><small>可随时打开并续聊</small></article><article><span id="applicationMetricLabel">采购申请</span><strong id="applicationCount">—</strong><small id="applicationMetricCopy">当前权限范围</small></article><article><span>等待审批</span><strong id="pendingCount">—</strong><small>流程待人工处理</small></article><article><span>Agent 运行</span><strong id="runProgress">—</strong><small id="runSummary">独立运行控制面</small></article></section>
+      <section class="quick-grid"><a href="/chat"><b>01</b><span><strong>采购对话</strong><small>新建对话、打开历史、选择模型</small></span><i>→</i></a><a href="/applications"><b>02</b><span><strong>申请与审批</strong><small>独立查看每笔申请的完整记录</small></span><i>→</i></a><a href="/runs"><b>03</b><span><strong>Agent 运行</strong><small>任务清单、工具调用与 SSE 事件</small></span><i>→</i></a></section>
+      <section class="workspace-grid"><div class="control-card"><div class="card-heading"><h2>最近申请</h2><a href="/applications">查看全部 →</a></div><div id="recentApplications"></div></div><div class="control-card"><div class="card-heading"><h2>最近对话</h2><a href="/chat">进入对话 →</a></div><div id="recentConversations"></div></div></section>
+      <section class="technical-grid admin-only" id="technicalGrid"><a href="/skills"><span>Skills Registry</span><strong id="skillsStatus">—</strong><small>发现、校验与启停</small></a><a href="/sandboxes"><span>Sandbox Proxy</span><strong id="sandboxStatus">—</strong><small>健康检查与热替换</small></a><a href="/models"><span>Model Center</span><strong>统一管理</strong><small>按厂商复用 API Key</small></a><a href="/langfuse"><span>LangFuse</span><strong>链路追踪</strong><small>连接并查看真实 Trace</small></a></section>
+    </main>
+  </div>
+</div><div class="toast" id="toast"></div><script src="/static/overview.js" defer></script></body></html>

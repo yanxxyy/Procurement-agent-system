@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="智能采购助手订单申请与审批历史" />
+    <title>申请记录 · Harness Procurement</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/applications.css" />
+  </head>
+  <body class="auth-pending">
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="后台主导航">
+        <a class="brand" href="/" aria-label="采购执行舱首页">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="brand-copy"><strong>HARNESS</strong><small>采购智能中台</small></span>
+        </a>
+        <nav class="sidebar-nav">
+          <p class="sidebar-label">采购工作台</p>
+          <a class="sidebar-item" href="/"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 13h6V4H4v9Zm0 7h6v-4H4v4Zm10 0h6v-9h-6v9Zm0-16v4h6V4h-6Z"/></svg><span>工作概览</span></a>
+          <a class="sidebar-item" href="/chat"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4V5Z"/></svg><span>采购对话</span><i class="nav-live"></i></a>
+          <a class="sidebar-item active" href="/applications" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6m-6 4h6m-6 4h3"/></svg><span>申请记录</span><em id="navApplicationCount">0</em></a>
+          <a class="sidebar-item" href="/runs"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="m8 7 3 8m5-8-3 8M8 6h8"/></svg><span>Agent 运行</span></a>
+          <div class="admin-only">
+            <p class="sidebar-label system-label">系统能力</p>
+            <a class="sidebar-item" href="/models"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10 4v6m-3-3h6M4 17h7"/></svg><span>模型中心</span></a>
+            <a class="sidebar-item" href="/skills"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2 4 4 .5-3 3 .8 4.5L12 13l-3.8 2 .8-4.5-3-3L10 7l2-4Z"/></svg><span>Skills 技能</span></a>
+            <a class="sidebar-item" href="/sandboxes"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7 12 3l8 4-8 4-8-4Zm0 5 8 4 8-4M4 17l8 4 8-4"/></svg><span>沙箱实例</span></a>
+            <a class="sidebar-item" href="/langfuse"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19V9m7 10V5m7 14v-7M3 19h18"/></svg><span>LangFuse 链路</span></a>
+          </div>
+        </nav>
+        <a class="sidebar-footer user-switch" href="/login?switch=1" title="切换用户">
+          <div class="user-avatar" id="sidebarAvatar">—</div>
+          <div class="user-copy"><strong id="sidebarUserName">载入中</strong><span id="sidebarUserRole">—</span></div>
+          <span class="user-more">切换</span>
+        </a>
+      </aside>
+
+      <div class="admin-content">
+        <header class="topbar">
+          <div class="topbar-title"><span>采购中心</span><i>/</i><strong>申请记录</strong></div>
+          <div class="topbar-center"><span id="scopeLabel">读取权限范围</span><i></i><span>审批记录持久化</span></div>
+          <div class="topbar-actions"><span class="role-pill" id="rolePill">—</span><button class="ghost-button" id="refreshButton" type="button">刷新记录</button></div>
+        </header>
+
+        <main class="applications-shell">
+          <section class="applications-heading">
+            <div><p class="section-kicker">ORDER ARCHIVE</p><h1>申请与审批记录</h1><p id="pageDescription">每笔申请独立归档，保留提交与审批全过程。</p></div>
+            <a class="primary-link" href="/chat"><span>＋</span> 进入采购对话</a>
+          </section>
+
+          <section class="archive-metrics" aria-label="申请统计">
+            <article><span>全部申请</span><strong id="totalCount">0</strong><small>独立申请档案</small></article>
+            <article><span>等待审批</span><strong id="pendingCount">0</strong><small>管理员待处理</small></article>
+            <article><span>已批准</span><strong id="approvedCount">0</strong><small>已生成采购订单</small></article>
+          </section>
+
+          <section class="archive-workspace">
+            <div class="archive-list-panel panel">
+              <div class="archive-toolbar">
+                <div class="filter-tabs" role="tablist" aria-label="申请状态筛选">
+                  <button class="active" type="button" data-filter="all">全部</button>
+                  <button type="button" data-filter="pending_approval">待审批</button>
+                  <button type="button" data-filter="approved">已批准</button>
+                </div>
+                <label class="archive-search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="搜索编号、物料或申请人" /></label>
+              </div>
+              <div class="archive-list" id="archiveList" aria-live="polite"><div class="archive-loading">正在读取申请历史…</div></div>
+            </div>
+
+            <aside class="application-detail panel" id="applicationDetail" aria-live="polite">
+              <div class="detail-empty"><span>↗</span><strong>选择一笔申请</strong><p>这里会显示申请内容、订单号和完整审批时间线。</p></div>
+            </aside>
+          </section>
+        </main>
+      </div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/static/applications.js" defer></script>
+  </body>
+</html>
